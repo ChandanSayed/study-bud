@@ -12,6 +12,7 @@
     border-radius: 8px;
   "
 >
+  <a href="{% url 'update-room' room.id %}"><p>Update</p></a>
   <span>{{room.host.username}}</span>
   <p><a href="{% url 'room-details' room.id %}">{{ room.name }}</a></p>
   <span>{{room.topic.name}}</span>

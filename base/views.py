@@ -7,7 +7,7 @@ from .forms import RoomForm
 
 
 def home(request):
-  rooms = Room.objects.all().order_by('-created')
+  rooms = Room.objects.all().order_by('-updated','-created')
   print(rooms)
   context = {
     'all_rooms': rooms,
@@ -17,7 +17,6 @@ def home(request):
 
 def room(request,pk):
   room = Room.objects.get(id=pk)
-  print()
   context = {
     'room': room,
   }
@@ -33,4 +32,16 @@ def CreateRoom(request):
       form.save()
       return redirect('home')
   context ={'form':form}
+  return render(request,'base/room_form.html',context)
+
+
+def UpdateRoom(request,pk):
+  room = Room.objects.get(id=pk)
+  form = RoomForm(instance=room)
+  if request.method == 'POST':
+    form = RoomForm(request.POST, instance=room)
+    if form.is_valid():
+      form.save()
+      return redirect('home')
+  context = {'form':form}
   return render(request,'base/room_form.html',context)
