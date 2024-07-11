@@ -8,10 +8,12 @@ from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 
 def LoginPage(request):
+  page = 'login'
   if request.user.is_authenticated:
         return redirect('home')
   if request.method == 'POST':
@@ -31,7 +33,14 @@ def LoginPage(request):
     else:
       messages.error(request,'Username or password is incorrect')
 
-  context = {}
+  context = {'page':page}
+  return render(request, 'base/login_register.html',context)
+
+def RegisterPage(request):
+  form = UserCreationForm()
+  if request.user.is_authenticated:
+        return redirect('home')
+  context = {'form':form}
   return render(request, 'base/login_register.html',context)
 
 def LogoutUser(request):
