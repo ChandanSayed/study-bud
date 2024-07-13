@@ -78,7 +78,7 @@ def Home(request):
 
 def GetRoom(request,pk):
   room = Room.objects.get(id=pk)
-  roomMessages = room.message_set.all()
+  roomMessages = room.message_set.all().order_by('-created')
   context = {
     'room': room,
    'roomMessages': roomMessages
