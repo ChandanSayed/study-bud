@@ -6,7 +6,7 @@ from django.db.models import Q
 from .models import Room,Topic
 from .forms import RoomForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
@@ -17,7 +17,7 @@ def LoginPage(request):
   if request.user.is_authenticated:
         return redirect('home')
   if request.method == 'POST':
-    username = request.POST.get('username')
+    username = request.POST.get('username').lower()
     password = request.POST.get('password')
     try:
       user = User.objects.get(username=username)
@@ -41,6 +41,18 @@ def RegisterPage(request):
   if request.user.is_authenticated:
         return redirect('home')
   context = {'form':form}
+  if request.method == 'POST':
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      user = form.save(commit=False)
+      user.username = user.username.lower()
+      user.save()
+      login(request,user)
+      messages.success(request,'Logged in successfully')
+      return redirect('home')
+    else: 
+      messages.error(request,form.errors)
+
   return render(request, 'base/login_register.html',context)
 
 def LogoutUser(request):
