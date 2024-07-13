@@ -78,8 +78,10 @@ def Home(request):
 
 def GetRoom(request,pk):
   room = Room.objects.get(id=pk)
+  roomMessages = room.message_set.all()
   context = {
     'room': room,
+   'roomMessages': roomMessages
   }
   template = loader.get_template('base/room.html')
   return HttpResponse(template.render(context,request))

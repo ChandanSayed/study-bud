@@ -1,7 +1,16 @@
 {%extends 'main.html'%} {%block content %}
 
-<ul>
-  <h2>{{room.name}}</h2>
-</ul>
+<h2>{{room.name}}</h2>
+
+<p>{{room.description}}</p>
+<div>
+  <h3>Conversation</h3>
+  <hr />
+  {% for message in roomMessages %}
+  <div>
+    <small>@{{message.user}} {{message.created |timesince}} ago</small>
+  </div>
+  {% endfor %}
+</div>
 
 {%endblock %}
